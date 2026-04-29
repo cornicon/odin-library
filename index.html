@@ -8,7 +8,31 @@
     <script src="./javascript.js" defer></script>
 </head>
 <body>
+    <dialog id="bookDialog">
+        <form id="bookForm">
+            <p>Add a book
+            <label>Title
+                <input type="text" name="title" required />
+            </label>
+            <label>Author
+                <input type="text" name="author" required />
+            </label>
+            <label>Pages
+                <input type="text" name=pages required />
+            </label>
+            <label>Read?
+                <input type="checkbox" name="read" required />
+            </label>
+            </p>
+            <div>
+            <button id="cancelBtn" value="cancel" formmethod="dialog">Cancel</button>
+            <button id="confirmBtn" value="default">Confirm</button>
+            </div>
+        </form>
+    </dialog>
+
     <H1>My Little Library</H1>
+    <button id="showBookDialog">Add A Book</button>
     <table border="1">
         <thead>
         <tr>
@@ -19,9 +43,6 @@
             </tr>
         </thead>
         <tbody id="book-data">
-            <tr>
-                <td>h</td>
-            </tr>
         </tbody>
     </table>
 
