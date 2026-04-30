@@ -4,6 +4,9 @@ const addABookButton = document.getElementById("showBookDialog");
 const bookDialog = document.getElementById("bookDialog");
 const confirmBtn = document.getElementById("confirmBtn");
 const form = document.getElementById("bookForm");
+const cancelBtn = document.getElementById("cancelBtn");
+const deleteBookButtons = document.getElementsByClassName('deleteBookBtn');
+
 
 // "Show the dialog" button opens the <dialog> modally
 addABookButton.addEventListener("click", () => {
@@ -11,16 +14,18 @@ addABookButton.addEventListener("click", () => {
     bookDialog.showModal();
 });
 
-// "Cancel" button closes the dialog without submitting because of [formmethod="dialog"], triggering a close event.
-bookDialog.addEventListener("close", (e) => {
+cancelBtn.addEventListener("click", () => {
+    // Closes the modal and sets returnValue to "cancel"
+    event.preventDefault();
+    bookDialog.close("cancel"); 
+});
 
-    if(bookDialog.returnValue !== "cancel")
-    {
-        const book = bookDialog.returnValue;
-        console.log(book);
-        addBookToLibrary(book); // Have to check for "default" rather than empty string
+bookDialog.addEventListener("close", () => {
+    if (bookDialog.returnValue === "success") {
+        console.log("Book added successfully!");
+    } else {
+        console.log("Action was cancelled.");
     }
-
 });
 
 // Prevent the "confirm" button from the default behavior of submitting the form, and close the dialog with the `close()` method, which triggers the "close" event.
@@ -37,7 +42,7 @@ confirmBtn.addEventListener("click", (event) => {
   const newBook = new Book(title, author, pages, read);
   addBookToLibrary(newBook);
 
-  bookDialog.close(book); // Have to send the select box value here.
+  bookDialog.close("success"); // Have to send the select box value here.
 });
 
 function Book(title, author, pages, readStatus) {
@@ -55,6 +60,19 @@ function addBookToLibrary(title, author, pages, read) {
   renderBookData();
 }
 
+function deleteBookFromLibrary(id) {
+    // const targetGuid = 'your-guid-here';
+    const index = myLibrary.findIndex(item => item.id === id);
+
+    console.log(`Deleting ${id} from library in index ${index}`)
+
+    if (index !== -1) {
+        myLibrary.splice(index, 1); // Removes 1 element at the found index
+        renderBookData();
+    }
+    
+}
+
 function addBookToLibrary(bookX) {
     myLibrary.push(bookX);
     renderBookData();
@@ -69,6 +87,11 @@ function renderBookData() {
                 <td>${book.author}</td>
                 <td>${book.pages}</td>
                 <td>${book.readStatus ? "true" : "false"}</td>
+                <td><button id="${book.id}" onClick="deleteBookFromLibrary(id)">Delete</button></td>
             </tr>`;
-});
+    
+            // const deletebutton = document.getElementById(`${book.id}`);
+            // deletebutton.addEventListener("click", () => deleteBookFromLibrary(book.id));
+            // <td><button id="${book.id}" class=deleteBookBtn">Delete</button></td>
+        });
 }
