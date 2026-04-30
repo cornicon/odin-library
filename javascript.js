@@ -52,6 +52,13 @@ function Book(title, author, pages, readStatus) {
   this.pages = pages;
   this.readStatus = readStatus;
   this.id = crypto.randomUUID();
+
+  this.toggleRead = function() {
+    if(this.readStatus === 0)
+        this.readStatus = 1;
+    else
+        this.readStatus = 0;
+  }
 }
 
 function addBookToLibrary(title, author, pages, read) {
@@ -78,6 +85,15 @@ function addBookToLibrary(bookX) {
     renderBookData();
 }
 
+function changeReadStatus(id) {
+    const index = myLibrary.findIndex(item => item.id === id);
+
+    if (index !== -1) {
+        myLibrary[index].toggleRead();
+    }
+
+}
+
 function renderBookData() {
     bookData.innerHTML = "";
     myLibrary.forEach((book) => {
@@ -86,8 +102,8 @@ function renderBookData() {
                 <td>${book.title}</td>
                 <td>${book.author}</td>
                 <td>${book.pages}</td>
-                <td>${book.readStatus ? "true" : "false"}</td>
-                <td><button id="${book.id}" onClick="deleteBookFromLibrary(id)">Delete</button></td>
+                <td>${book.readStatus ? `<input onClick="changeReadStatus('${book.id}')" type="checkbox" checked>` : `<input type="checkbox" onClick="changeReadStatus('${book.id}')">`}</td>
+                <td><button onClick="deleteBookFromLibrary('${book.id}')">Delete</button></td>
             </tr>`;
     
             // const deletebutton = document.getElementById(`${book.id}`);
